@@ -47,8 +47,15 @@ class Todo:
             path = self.path(doc_name)
             task_id = int(input('Which do these tasks you want to remove? '))
 
+            memory_tasks = []
             with path.open() as f:
                 for fl in f.readlines():
-                    print(fl) # It's necessary to split the words to come out the ID
+                    memory_tasks.append(fl)
 
-            print(task_id)
+            memory_tasks.pop( task_id - 1 )
+
+            new_content = ''
+            for task in memory_tasks:
+                new_content += task
+
+            path.write_text(new_content)
