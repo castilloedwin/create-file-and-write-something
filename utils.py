@@ -17,13 +17,24 @@ class Todo:
         path.write_text('')
         return path
 
+    # This method verify if there is content into a file
+    def is_there_content(self, text):
+
+        if len(text):
+            return f'{text}\n'
+
+        return ''
+
     def create_task(self, task_name):
         doc_name = input('What is the document name where you want to type this task? ')
         path = self.path(doc_name)
 
         if path.exists():
             _id = self.generate_task_id(doc_name)
-            new_content = f'{path.read_text()}\n{_id} - {task_name} - {date.today()} at {time.time()}'
+            
+            read_text = self.is_there_content( path.read_text() )
+
+            new_content = f'{read_text}{_id} - {task_name} - {date.today()} at {time.time()}'
             path.write_text(new_content)
             print('The task has been created')
         else:
@@ -45,17 +56,26 @@ class Todo:
     def delete_task(self, doc_name):
         if self.read_document(doc_name):
             path = self.path(doc_name)
-            task_id = int(input('Which do these tasks you want to remove? '))
+            task_id = input('Which do these tasks you want to remove? ')
 
-            memory_tasks = []
+            # This variable saves in memory the tasks to be able having id into dictionary
+            memory_tasks = {}
+
             with path.open() as f:
                 for fl in f.readlines():
-                    memory_tasks.append(fl)
+                    _id = fl.split('-')[0].replace(' ', '')
+                    memory_tasks[_id] = fl
 
-            memory_tasks.pop( task_id - 1 )
+            if task_id in memory_tasks:
+                memory_tasks.pop(task_id)
 
-            new_content = ''
-            for task in memory_tasks:
-                new_content += task
+                new_content = ''
+                for task in memory_tasks:
+                    new_content += memory_tasks[task]
 
-            path.write_text(new_content)
+                print(new_content)
+                path.write_text(new_content)
+                print('Task has been deleted')
+
+            else:
+                print('Task you want to remove does not exist')
