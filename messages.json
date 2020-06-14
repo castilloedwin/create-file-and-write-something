@@ -4,6 +4,6 @@
     "task_deleted": "Task has been deleted",
     "do_you_wanna_create_it": "The document name does not exist, do you want yo create it? (Y/n) ",
     "document_does_not_exist": "This document does not exist ",
-    "wish": "Which do these tasks you want to remove? ",
+    "task_id": "Select a task ",
     "task_no": "Task you want to remove does not exist"
 }

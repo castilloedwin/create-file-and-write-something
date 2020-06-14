@@ -7,4 +7,4 @@ while len(document_name) < 1:
     print('Must select a document ')
     document_name = input('Select a document ')
 else:
-    todo.delete_task(document_name)
+    todo.update_task(document_name)

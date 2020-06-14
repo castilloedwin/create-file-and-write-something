@@ -50,18 +50,39 @@ class Todo:
             print(path.read_text())
             return True
 
+    def update_task(self, doc_name):
+        if self.read_document(doc_name):
+            path = self.path(doc_name)
+            task_id = input(Alert().messages['task_id']) # It's neccesary to select a task id
+
+            with path.open() as f:
+                memory_tasks = { f"{fl.split('-')[0].strip()}": fl for fl in f.readlines() }
+
+            if task_id in memory_tasks:
+                task = memory_tasks.get(str(task_id))
+                word = input('What word do you wanna change? ')
+                new_word = input('What is the new word? ')
+                
+                memory_tasks[str(task_id)] = task.replace(word, new_word)
+
+                new_content = ''
+                for mt in memory_tasks:
+                    new_content += memory_tasks[mt]
+
+                path.write_text(new_content)
+                print('Task has beed updated successfuly')
+            else:
+                print('Task you want to update does not exist')
+
+
+
     def delete_task(self, doc_name):
         if self.read_document(doc_name):
             path = self.path(doc_name)
-            task_id = input(Alert().messages['wish'])
-
-            # This variable saves in memory the tasks to be able having id into dictionary
-            memory_tasks = {}
+            task_id = input(Alert().messages['task_id']) # It's neccesary to select a task id
 
             with path.open() as f:
-                for fl in f.readlines():
-                    _id = fl.split('-')[0].replace(' ', '')
-                    memory_tasks[_id] = fl
+                memory_tasks = { f"{fl.split('-')[0].strip()}": fl for fl in f.readlines() }
 
             if task_id in memory_tasks:
                 memory_tasks.pop(task_id)
@@ -70,7 +91,6 @@ class Todo:
                 for task in memory_tasks:
                     new_content += memory_tasks[task]
 
-                print(new_content)
                 path.write_text(new_content)
                 print(Alert().messages['task_deleted'])
             else:
