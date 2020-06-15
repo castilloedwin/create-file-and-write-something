@@ -74,8 +74,6 @@ class Todo:
             else:
                 print('Task you want to update does not exist')
 
-
-
     def delete_task(self, doc_name):
         if self.read_document(doc_name):
             path = self.path(doc_name)
